@@ -1,66 +1,59 @@
 from flask import jsonify, Flask, render_template, request
 import logging
-from logging import Formatter, FileHandler
-from forms import *
 import os
 
-#----------------------------------------------------------------------------#
+logger = logging.getLogger(__name__)
+
+# ----------------------------------------------------------------------------#
 # App Config.
-#----------------------------------------------------------------------------#
+# ----------------------------------------------------------------------------#
 
 app = Flask(__name__)
-app.config.from_object('config')
+app.config.from_object("config")
 
 # Automatically tear down SQLAlchemy.
-'''
+"""
 @app.teardown_request
 def shutdown_session(exception=None):
     db_session.remove()
-'''
+"""
 
-#----------------------------------------------------------------------------#
+# ----------------------------------------------------------------------------#
 # Controllers.
-#----------------------------------------------------------------------------#
+# ----------------------------------------------------------------------------#
 
 
-@app.route('/')
+@app.route("/")
 def home():
-    return render_template('templates/index.html')
+    return render_template("index.html")
+
+
+@app.route("/api", methods=["GET"])
+def api_root():
+    return jsonify({})
 
 
 # Error handlers.
 
-@app.errorhandler(500)
-def internal_error(error):
-    #db_session.rollback()
-    return render_template('errors/500.html'), 500
-
 
 @app.errorhandler(404)
 def not_found_error(error):
-    return render_template('errors/404.html'), 404
+    return jsonify({"error": "not found"}), 404
 
-if not app.debug:
-    file_handler = FileHandler('error.log')
-    file_handler.setFormatter(
-        Formatter('%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]')
-    )
-    app.logger.setLevel(logging.INFO)
-    file_handler.setLevel(logging.INFO)
-    app.logger.addHandler(file_handler)
-    app.logger.info('errors')
 
-#----------------------------------------------------------------------------#
-# Launch.
-#----------------------------------------------------------------------------#
+@app.errorhandler(Exception)
+def internal_error(error):
+    logger.error(error)
+    return jsonify({"error": error.status}), error.status or 500
+
 
 # Default port:
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run()
 
 # Or specify port manually:
-'''
+"""
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
-'''
+"""
