@@ -1,9 +1,11 @@
 from flask import jsonify, Flask, render_template, request
+from flask_cors import CORS
 import json
 import logging
 import os
 
-MOCK_STATIONS = json.load(
+STATIONS_LIST = json.load(open("data/stations.json", "r"))
+MOCK_STATION_STATS = json.load(
     open("data/citybike-stations-2018-11-24-1316.json", "r")
 )  # TODO replace with real availability/prediction data
 logger = logging.getLogger(__name__)
@@ -14,6 +16,7 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 app.config.from_object("config")
+CORS(app)
 
 # Automatically tear down SQLAlchemy.
 """
@@ -33,12 +36,20 @@ def home():
 
 
 @app.route("/api/bikestations", methods=["GET"])
-def api_root():
+def list_station_stats():
     """
     List all bike stations along with location, number of bikes and predicted
     demand for bikes
     """
-    return jsonify(MOCK_STATIONS)
+    return jsonify(MOCK_STATION_STATS)
+
+
+@app.route("/api/stations", methods=["GET"])
+def list_stations():
+    """
+    List all stations along with name, coordinates etc.
+    """
+    return jsonify(STATIONS_LIST)
 
 
 # Error handlers.

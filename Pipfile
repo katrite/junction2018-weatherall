@@ -16,6 +16,7 @@ pylint = "*"
 flask = "*"
 requests = "*"
 influxdb = "*"
+flask-cors = "*"
 
 
 [requires]
