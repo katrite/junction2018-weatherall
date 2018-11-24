@@ -17,6 +17,7 @@ flask = "*"
 requests = "*"
 influxdb = "*"
 flask-cors = "*"
+gunicorn = "*"
 
 
 [requires]
