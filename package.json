@@ -1,0 +1,22 @@
+{
+  "name": "junction2018-weatherall",
+  "version": "1.0.0",
+  "description": "Junction 2018 entry",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/epiphone/junction2018-weatherall.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/epiphone/junction2018-weatherall/issues"
+  },
+  "homepage": "https://github.com/epiphone/junction2018-weatherall#readme",
+  "dependencies": {
+    "vue": "^2.5.17"
+  }
+}
