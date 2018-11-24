@@ -14,6 +14,8 @@ pylint = "*"
 [packages]
 
 flask = "*"
+requests = "*"
+influxdb = "*"
 
 
 [requires]

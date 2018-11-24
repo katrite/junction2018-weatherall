@@ -1,7 +1,11 @@
 from flask import jsonify, Flask, render_template, request
+import json
 import logging
 import os
 
+MOCK_STATIONS = json.load(
+    open("data/citybike-stations-2018-11-24-1316.json", "r")
+)  # TODO replace with real availability/prediction data
 logger = logging.getLogger(__name__)
 
 # ----------------------------------------------------------------------------#
@@ -28,9 +32,13 @@ def home():
     return render_template("index.html")
 
 
-@app.route("/api", methods=["GET"])
+@app.route("/api/bikestations", methods=["GET"])
 def api_root():
-    return jsonify({})
+    """
+    List all bike stations along with location, number of bikes and predicted
+    demand for bikes
+    """
+    return jsonify(MOCK_STATIONS)
 
 
 # Error handlers.
