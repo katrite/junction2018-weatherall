@@ -4,6 +4,8 @@ import json
 import logging
 import os
 
+from integrations import vaisala
+
 STATIONS_LIST = json.load(open("data/stations.json", "r"))
 MOCK_STATION_STATS = json.load(
     open("data/citybike-stations-2018-11-24-1316.json", "r")
@@ -35,6 +37,15 @@ def home():
     return render_template("index.html")
 
 
+@app.route("/api/weather_sensor_readings", methods=["GET"])
+def get_weather_sensor_readings():
+    """
+    Return the latest Vaisala device readings.
+    """
+    res = vaisala.get_latest_reading()
+    return jsonify(res)
+
+
 @app.route("/api/bikestations", methods=["GET"])
 def list_station_stats():
     """
@@ -62,8 +73,8 @@ def not_found_error(error):
 
 @app.errorhandler(Exception)
 def internal_error(error):
-    logger.error(error)
-    return jsonify({"error": error.status}), error.status or 500
+    logger.exception(error)
+    return jsonify({"error": "unhandled server error"}), 500
 
 
 # Or specify port manually:
