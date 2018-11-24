@@ -4,6 +4,7 @@ import json
 import logging
 import os
 
+from integrations import citybikes
 from integrations import vaisala
 
 STATIONS_LIST = json.load(open("data/stations.json", "r"))
@@ -53,6 +54,12 @@ def list_station_stats():
     demand for bikes
     """
     return jsonify(MOCK_STATION_STATS)
+
+
+@app.route("/api/livestations", methods=["GET"])
+def list_live_station_stats():
+    stations = citybikes.list_stations()
+    return jsonify({"stations": stations})
 
 
 @app.route("/api/stations", methods=["GET"])
